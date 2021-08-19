@@ -21,7 +21,7 @@ const iceServers = {
 }
 
 const streamConstraints = {
-    video: true,
+    // video: true,
     audio: true,
 }
 
@@ -78,14 +78,16 @@ socket.on("ready", () => {
 
     rtcPeerConnection = new RTCPeerConnection(iceServers);
     // So every time a new ICE candidate found, onicecandidate event is trigged or fire.
-    rtcPeerConnection.onicecandidate = onicecandidate;
+    rtcPeerConnection.onicecandidate = onIceCandidate;
     rtcPeerConnection.ontrack = onAddRemoteStream;
 
     const tracks = localStream.getTracks();
     console.log("isCaller [getTracks]", tracks);
+    const [videoTrack, audioTrack] = tracks;
+    console.log("videoTrack =", videoTrack, "audioTrack =", audioTrack);
 
     rtcPeerConnection.addTrack(localStream.getTracks()[0], localStream);
-    rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
+    if(audioTrack) rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
 
     // Creating offer
     rtcPeerConnection.createOffer()
@@ -115,15 +117,17 @@ socket.on("offer", sdp => {
     console.log("Sending or answering to an offer get by caller or user or sender.");
 
     rtcPeerConnection = new RTCPeerConnection(iceServers);
-    rtcPeerConnection.onicecandidate = onicecandidate;
+    rtcPeerConnection.onicecandidate = onIceCandidate;
     rtcPeerConnection.ontrack = onAddRemoteStream;
     rtcPeerConnection.setRemoteDescription( new RTCSessionDescription(sdp) );
 
     const tracks = localStream.getTracks();
     console.log("not isCaller [getTracks]", tracks);
+    const [videoTrack, audioTrack] = tracks;
+    console.log("videoTrack =", videoTrack, "audioTrack =", audioTrack);
 
     rtcPeerConnection.addTrack(localStream.getTracks()[0], localStream);
-    rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
+    if(audioTrack) rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
 
     // Creating offer
     rtcPeerConnection.createAnswer()
