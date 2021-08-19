@@ -6,6 +6,10 @@ const divConsultingRoom = document.getElementById("consultingRoom");
 const localVideo        = document.getElementById("localVideo");
 const remoteVideo       = document.getElementById("remoteVideo");
 
+// For audio call
+const localAudio = document.getElementById('localAudio'); 
+const remoteAudio = document.getElementById('remoteAudio');
+
 let roomNumber, localStream, remoteStream, rtcPeerConnection, isCaller;
 
 
@@ -31,6 +35,9 @@ const getUserMedia = async () => {
         const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
         localStream = stream;
         localVideo.srcObject = stream;
+
+        // for audio
+        localAudio.srcObject = createObjectURL(stream);
 
     } catch(error) {
         console.log("Error occoured while [getUserMedia] = ", error);
@@ -174,6 +181,10 @@ const onAddRemoteStream = (receivedRemoteStream) => {
     console.log("[onAddRemoteStream] received receivedRemoteStream", receivedRemoteStream);
     remoteVideo.srcObject = receivedRemoteStream[0];
     remoteStream = receivedRemoteStream;
+
+    // for adudio
+    //displaying local audio stream on the page 
+    remoteAudio.src = window.URL.createObjectURL(receivedRemoteStream[0]);
 }
 
 
