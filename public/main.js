@@ -21,7 +21,7 @@ const iceServers = {
 }
 
 const streamConstraints = {
-    // video: true,
+    video: true,
     audio: true,
 }
 
