@@ -34,6 +34,7 @@ const getUserMedia = async () => {
 
     } catch(error) {
         console.log("Error occoured while [getUserMedia] = ", error);
+        alert(error);
     }
 }// End of getUserMedia method
 
@@ -100,6 +101,7 @@ socket.on("ready", () => {
         })
         .catch(error => {
             console.log("[isCaller] Error occured while sending or creating an offer");
+            alert(error);
         })
 
 });
@@ -137,6 +139,7 @@ socket.on("offer", sdp => {
         })
         .catch(error => {
             console.log("[not isCaller] Error occured while sending an answer");
+            alert(error);
         })
 
 });
